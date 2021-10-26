@@ -9,52 +9,60 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        VStack{
-            CardRow()
-            CardRow()
-            CardRow()
-            CardRow()
-        }
+        GridView()
     }
 }
 
 struct CardView: View{
-    var isFaceUp : Bool
+    
+    var content: String
+    @State var isFaceUp : Bool = false
+    
     var body: some View{
         ZStack {
+            let shape = RoundedRectangle(cornerRadius: 20)
             if isFaceUp{
-                RoundedRectangle(cornerRadius: 20)
-                     .stroke(lineWidth:3)
-                 RoundedRectangle(cornerRadius: 20)
-                     .fill()
-                     .foregroundColor(.white)
-                 Text("✈️")
+                shape.stroke(lineWidth:3)
+                 shape.fill().foregroundColor(.white)
+                 Text(content)
                      .font(.largeTitle)
                  
             } else{
-                RoundedRectangle(cornerRadius: 20).fill(.red)
+                shape.fill()
             }
            
         }
-        .padding(.horizontal)
         .foregroundColor(.red)
-        
+        .onTapGesture {
+            isFaceUp = !isFaceUp
+        }
     }
 }
 
 struct CardRow: View{
+    
+    var emojis = ["✈️", "🚗", "🚚", "🚃", "🚖", "🚒",
+                  "🚑", "🛺", "🛰", "🛳", "⛵️"]
+    var emojiCount = 6
     var body: some View{
         HStack{
-            CardView(isFaceUp: true)
-            CardView(isFaceUp: false)
-            CardView(isFaceUp: false)
-            CardView(isFaceUp: true)
+            ForEach(emojis[0..<5], id: \.self) { emoji in
+                CardView(content: emoji)
+            }
         }
         .padding()
     }
 }
 
-
+struct GridView: View{
+    var body: some View{
+        VStack{
+            CardRow()
+            CardRow()
+            CardRow()
+        }
+    }
+}
 
 
 
